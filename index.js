@@ -11,8 +11,6 @@ export const todoList = new TodoList();
 
 
 
-
-
 // le paso el objeto completo sin necesidad desglosar el objeto
 //todoList.todos.forEach(todo => crearTodoHtml(todo));
 
