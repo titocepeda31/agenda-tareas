@@ -11,14 +11,29 @@ const TxtInput = document.querySelector('.new-todo');
 const btnEliminar = document.querySelector('.clear-completed');
 const UlFilter = document.querySelector('.filters');
 const anchorFiltros =  document.querySelectorAll('.filtro');
+const contadorPendientes = document.querySelector('.contador-todos');
+
+
+
+
 
 // FUNCIONES
+
+
+// imprime el numero de todos pendientes 
+
+const contadorTodosPendientes = () =>{
+    contadorPendientes.innerText = todoList.contadorTodos();
+}
+
+
+
 
 export const crearTodoHtml = (todo) =>{  
   const htmlTodo = `  
         <li class="${(todo.completado)?'completed':''}" data-id="${todo.id}">
         <div class="view">
-        <input class="toggle" type="checkbox" ${(todo.completado)?'cjecked':''}>
+        <input class="toggle" type="checkbox" ${(todo.completado)?'checked':''}>
         <label>${todo.tarea}</label>
         <button class="destroy"></button>
         </div>
@@ -27,16 +42,20 @@ export const crearTodoHtml = (todo) =>{
         const div = document.createElement('div');
         div.innerHTML = htmlTodo;
         ulTodoList.append(div.firstElementChild);
+         // actualizo el numero de pendientes
+        contadorTodosPendientes();
         return div.firstElementChild;      
 }
 
 
+
+  
 // Eventos
 
 TxtInput.addEventListener('keyup',(event)=>{
     // se valida que sea enter y que el input no esté vacio
     if(event.keyCode === 13 && TxtInput.value.length > 0){
-        const nuevoTodo = new Todo (TxtInput.value);
+       const nuevoTodo = new Todo (TxtInput.value);
        todoList.nuevoTodo (nuevoTodo);
        crearTodoHtml(nuevoTodo);
        TxtInput.value = '';       
@@ -56,13 +75,19 @@ ulTodoList.addEventListener('click',(event)=>{
 
     if(NombreElemento == 'input' && TipoElemento =='checkbox'){
         todoList.marcarCompletado(IdElemento);
+        contadorTodosPendientes();
         // toggle agrega y quita clase al elemento
-        todoElemento.classList.toggle('completed');
+        todoElemento.classList.toggle('completed');     
     }else if(NombreElemento=='button' && TipoElemento =='submit'){
+
         // elimino todo del array JS
         todoList.eliminarTodo(IdElemento);
         // elimino el todo del html
         ulTodoList.removeChild(todoElemento);
+
+        // actualizo el numero de pendientes
+
+        contadorTodosPendientes();
     }
 
 });
@@ -104,12 +129,11 @@ UlFilter.addEventListener('click',(event)=>{
        switch(filtro){
 
         case 'Pendientes':  
-            (completado)?elemento.classList.add('hidden'):'';
-
+            if(completado) elemento.classList.add('hidden');            
         break;
 
         case 'Completados':
-            (!completado)?elemento.classList.add('hidden'):'';
+            if(!completado) elemento.classList.add('hidden');
         break;       
 
        }

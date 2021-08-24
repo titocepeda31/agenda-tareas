@@ -1,12 +1,8 @@
 export class TodoList {
     constructor(){
-
         // declaro un arreglo vacio para almacenar todas las otras tareas
         //this.todos = [];
-
-
         // La carga la tiene la función ahora
-
         this.cargarLocalStorage();
     }
 
@@ -36,6 +32,7 @@ export class TodoList {
                 // utilizo operador booleano
                 todo.completado = !todo.completado;
                // si encuentro el id requerido corto el ciclo for
+               this.guardarLocalStorage();
                 break;
             }
 
@@ -59,14 +56,13 @@ export class TodoList {
     }
 
     cargarLocalStorage(){
-
-
-
      this.todos = (localStorage.getItem('todos'))
                   ? JSON. parse(localStorage.getItem('todos')) 
-                  : [];
+                  : [];                  
+    }
 
-
+    contadorTodos(){
+        return this.todos.filter(todo => todo.completado == false).length;
     }
 
 }
