@@ -1,15 +1,15 @@
 import {Todo} from '../js/classes'
 import {todoList} from '../../index'
 
-const ulTodoList = document.querySelector('.todo-list');
-const TxtInput = document.querySelector('.new-todo');
-const btnEliminar = document.querySelector('.clear-completed');
-const UlFilter = document.querySelector('.filters');
-const anchorFiltros =  document.querySelectorAll('.filtro');
-const contadorPendientes = document.querySelector('.contador-todos');
+const todoListComponent = document.querySelector('.todo-list');
+const newTodoComponent = document.querySelector('.new-todo');
+const deleteTodoComponent = document.querySelector('.clear-completed');
+const filtersComponent = document.querySelector('.filters');
+const anchorFilterComponent =  document.querySelectorAll('.filtro');
+const pendingCountComponent = document.querySelector('.contador-todos');
 
 const contadorTodosPendientes = () =>{
-    contadorPendientes.innerText = todoList.contadorTodos();
+    pendingCountComponent.innerText = todoList.contadorTodos();
 }
 
 export const crearTodoHtml = (todo) =>{
@@ -24,21 +24,21 @@ export const crearTodoHtml = (todo) =>{
         </li>`;
         const div = document.createElement('div');
         div.innerHTML = htmlTodo;
-        ulTodoList.append(div.firstElementChild);
+        todoListComponent.append(div.firstElementChild);
         contadorTodosPendientes();
         return div.firstElementChild;
 }
 
-TxtInput.addEventListener('keyup',(event)=>{
-    if(event.keyCode === 13 && TxtInput.value.length > 0){
-       const nuevoTodo = new Todo (TxtInput.value);
+newTodoComponent.addEventListener('keyup',(event)=>{
+    if(event.keyCode === 13 && newTodoComponent.value.length > 0){
+       const nuevoTodo = new Todo (newTodoComponent.value);
        todoList.nuevoTodo (nuevoTodo);
        crearTodoHtml(nuevoTodo);
-       TxtInput.value = '';
+       newTodoComponent.value = '';
     }
 });
 
-ulTodoList.addEventListener('click',(event)=>{
+todoListComponent.addEventListener('click',(event)=>{
     const TipoElemento = event.target.type;
     const NombreElemento = event.target.localName;
     const todoElemento = event.target.parentElement.parentElement;
@@ -50,31 +50,31 @@ ulTodoList.addEventListener('click',(event)=>{
         todoElemento.classList.toggle('completed');
     } else if(NombreElemento=='button' && TipoElemento =='submit') {
         todoList.eliminarTodo(IdElemento);
-        ulTodoList.removeChild(todoElemento);
+        todoListComponent.removeChild(todoElemento);
         contadorTodosPendientes();
     }
 });
 
 
-btnEliminar.addEventListener('click', () =>{
+deleteTodoComponent.addEventListener('click', () =>{
     todoList.eliminaCompletados();
-    for(let i = ulTodoList.children.length-1; i>=0; i--){
-        const elemento = ulTodoList.children[i];
+    for(let i = todoListComponent.children.length-1; i>=0; i--){
+        const elemento = todoListComponent.children[i];
         if(elemento.classList.contains('completed')){
-            ulTodoList.removeChild(elemento);
+            todoListComponent.removeChild(elemento);
         }
     }
 });
 
 
-UlFilter.addEventListener('click',(event) => {
+filtersComponent.addEventListener('click',(event) => {
     const filtro = event.target.text;
     if (!filtro) return
 
-    anchorFiltros.forEach(elem => elem.classList.remove('selected'));
+    anchorFilterComponent.forEach(elem => elem.classList.remove('selected'));
     event.target.classList.add('selected');
 
-    for(const elemento of ulTodoList.children) {
+    for(const elemento of todoListComponent.children) {
        elemento.classList.remove('hidden');
        const completado = elemento.classList.contains('completed');
 
