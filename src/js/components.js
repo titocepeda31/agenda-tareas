@@ -8,12 +8,12 @@ const filtersComponent = document.querySelector('.filters');
 const anchorFilterComponent =  document.querySelectorAll('.filtro');
 const pendingCountComponent = document.querySelector('.contador-todos');
 
-const contadorTodosPendientes = () =>{
+const countAllTodosPending = () =>{
     pendingCountComponent.innerText = todoList.contadorTodos();
 }
 
-export const crearTodoHtml = (todo) =>{
-  const htmlTodo = `  
+export const render = (todo) =>{
+  const html = `  
         <li class="${(todo.completado)?'completed':''}" data-id="${todo.id}">
         <div class="view">
         <input class="toggle" type="checkbox" ${(todo.completado)?'checked':''}>
@@ -23,9 +23,9 @@ export const crearTodoHtml = (todo) =>{
         <input class="edit" value="Create a TodoMVC template">
         </li>`;
         const div = document.createElement('div');
-        div.innerHTML = htmlTodo;
+        div.innerHTML = html;
         todoListComponent.append(div.firstElementChild);
-        contadorTodosPendientes();
+        countAllTodosPending();
         return div.firstElementChild;
 }
 
@@ -33,7 +33,7 @@ newTodoComponent.addEventListener('keyup',(event)=>{
     if(event.keyCode === 13 && newTodoComponent.value.length > 0){
        const nuevoTodo = new Todo (newTodoComponent.value);
        todoList.nuevoTodo (nuevoTodo);
-       crearTodoHtml(nuevoTodo);
+       render(nuevoTodo);
        newTodoComponent.value = '';
     }
 });
@@ -46,12 +46,12 @@ todoListComponent.addEventListener('click',(event)=>{
 
     if (NombreElemento == 'input' && TipoElemento =='checkbox') {
         todoList.marcarCompletado(IdElemento);
-        contadorTodosPendientes();
+        countAllTodosPending();
         todoElemento.classList.toggle('completed');
     } else if(NombreElemento=='button' && TipoElemento =='submit') {
         todoList.eliminarTodo(IdElemento);
         todoListComponent.removeChild(todoElemento);
-        contadorTodosPendientes();
+        countAllTodosPending();
     }
 });
 
